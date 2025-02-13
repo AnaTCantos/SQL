@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centros</title>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Inicio</a></li>
+            <li><a href="centros.html">🏫 Centros</a></li>
+            <li><a href="alumnos.html">👨‍🎓 Alumnos</a></li>
+            <li><a href="estadisticas.html">📊 Estadísticas</a></li>
+            <li><a href="editar_curso.html?id=1">✏️ Editar Curso</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Listado de Centros</h1>
+    </header>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                </tr>
+            </thead>
+            <tbody id="centros-table">
+                <!-- Los datos se llenarán con JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        // Obtener datos de la API y llenar la tabla
+        fetch('/api/centros')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('centros-table');
+                data.forEach(centro => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${centro.nombre}</td>
+                        <td>${centro.direccion}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            });
+    </script>
+</body>
+</html>
+
+
+
+
+

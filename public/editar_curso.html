@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Curso</title>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Inicio</a></li>
+            <li><a href="centros.html">🏫 Centros</a></li>
+            <li><a href="alumnos.html">👨‍🎓 Alumnos</a></li>
+            <li><a href="estadisticas.html">📊 Estadísticas</a></li>
+            <li><a href="editar_curso.html?id=1">✏️ Editar Curso</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Editar Curso</h1>
+    </header>
+    <div class="container">
+        <form id="editar-curso-form">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="fecha_importacion">Fecha de Importación:</label>
+            <input type="date" id="fecha_importacion" name="fecha_importacion" required>
+
+            <label for="nivel">Nivel:</label>
+            <select id="nivel" name="nivel" required>
+                <option value="Básico">Básico</option>
+                <option value="Intermedio">Intermedio</option>
+                <option value="Avanzado">Avanzado</option>
+            </select>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" required></textarea>
+
+            <label for="lugar">Lugar:</label>
+            <input type="text" id="lugar" name="lugar" required>
+
+            <button type="submit">Actualizar</button>
+        </form>
+    </div>
+    <script>
+        // Obtener el ID del curso de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const cursoId = urlParams.get('id');
+
+        // Obtener datos del curso y llenar el formulario
+        fetch(`/api/cursos/${cursoId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('nombre').value = data.nombre;
+                document.getElementById('fecha_importacion').value = data.fecha_importacion;
+                document.getElementById('nivel').value = data.nivel;
+                document.getElementById('descripcion').value = data.descripcion;
+                document.getElementById('lugar').value = data.lugar;
+            });
+
+        // Manejar el envío del formulario
+        document.getElementById('editar-curso-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch(`/api/cursos/${cursoId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Curso actualizado correctamente');
+                        window.location.href = '/index.html';
+                    } else {
+                        alert('Error al actualizar el curso');
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

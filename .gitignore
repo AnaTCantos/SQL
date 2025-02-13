@@ -1,0 +1,24 @@
+# Ignorar node_modules
+/node_modules/
+
+# Ignorar el archivo de configuración .env
+.env
+
+# Ignorar archivos de logs
+*.log
+
+# Ignorar carpetas de editor (Visual Studio Code, por ejemplo)
+.vscode/
+
+# Ignorar archivos de dependencias instaladas globalmente
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar los archivos de build (si usas algún proceso de compilación o bundling)
+dist/
+build/
+
+# Otros archivos de configuración específicos del sistema
+.DS_Store
+Thumbs.db

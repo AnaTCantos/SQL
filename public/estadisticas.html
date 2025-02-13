@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfica de Aprobados</title>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Agregamos la importación correcta de Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Inicio</a></li>
+            <li><a href="centros.html">🏫 Centros</a></li>
+            <li><a href="alumnos.html">👨‍🎓 Alumnos</a></li>
+            <li><a href="estadisticas.html">📊 Estadísticas</a></li>
+            <li><a href="editar_curso.html?id=1">✏️ Editar Curso</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>Gráfica de Aprobados</h1>
+    </header>
+    <div class="container">
+        <canvas id="grafica"></canvas>
+    </div>
+    <script>
+        // Obtener datos de la API y generar la gráfica
+        fetch('/api/grafica')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('grafica').getContext('2d');
+
+                // Verificar que los datos no sean cero para evitar errores de división
+                const labels = data.map(item => item.nombre);
+                const values = data.map(item => item.total > 0 ? (item.aprobados / item.total) * 100 : 0);
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Ratio de Aprobados',
+                            data: values,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Porcentaje de Aprobados'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Cursos'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error al cargar los datos:', error));
+    </script>
+</body>
+</html>
